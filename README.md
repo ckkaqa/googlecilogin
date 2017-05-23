@@ -23,3 +23,6 @@ $config['googleplus']['redirect_uri']     = 'http://localhost/my_directory/';
 
 ## Tutorial based on
 > http://www.9lessons.info/2012/09/login-with-google-account-oauth.html
+
+codes are not mine, its from https://github.com/moemoe89/google-login-ci3
+

@@ -66,15 +66,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	</style>
 </head>
 <body>
-<a href="https://github.com/moemoe89/google-login-ci3"><img style="position: absolute; top: 0; right: 0; border: 0; width: 149px; height: 149px;" src="http://aral.github.com/fork-me-on-github-retina-ribbons/right-graphite@2x.png" alt="Fork me on GitHub"></a>
-<div id="container">
-	<h1>CodeIgniter Sign In With Google+</h1>
-
-	<div id="body">
-		<p><a href="<?php echo $login_url;?>"><img src="./assets/sign_in.jpg" width="300"></a></p>
-	</div>
-
-	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>
+<div id="body">
+	<p><a href="<?php echo $login_url;?>"><img src="./assets/sign_in.jpg" width="300"></a></p>
 </div>
 
 </body>
