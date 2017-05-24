@@ -32,9 +32,13 @@ class Welcome extends CI_Controller {
 	}
 
 	public function getConversation($roomId=false){
-		
+		$userInfo = $this->session->userdata('user_profile');
+
 		$data['conversation'] = $this->m_chat_room->getRoomWithConversation($roomId);
 		$data['roomId'] = $roomId;
+		$data['loggedInUserId'] = $this->session->userdata('user_id');
+		$data['fullname'] = $userInfo['name'];
+		$data['picture'] = $userInfo['picture'];
 		$s = $data['getAllUserMessage'] = function($users)use($roomId){
 			return $this->m_chat->getAllRoomMessagesByUsers($roomId, $users);
 		};
