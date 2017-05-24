@@ -55,6 +55,7 @@ class M_chat extends CI_Model {
 		     ->from( 'message')
 		     ->where( 'room_id', $roomId )
 		     ->where_in( 'user', $users )
+		     ->join('user', 'user.id = message.user', 'left')
 		     ->order_by('created_at', 'ASC')
 		     ->get();
 
