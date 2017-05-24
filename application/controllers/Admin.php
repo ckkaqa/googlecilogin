@@ -26,6 +26,10 @@ class Admin extends CI_Controller {
  		$data['getAllUserMessage'] = function($users)use($conversation_id){
  			return $this->m_chat->getAllRoomMessagesByUsers($conversation_id, $users);
  		};
+ 		$userInfo = $this->session->userdata('user_profile');
+ 		$data['loggedInUserId'] = $this->session->userdata('user_id');
+ 		$data['fullname'] = $userInfo['name'];
+		$data['picture'] = $userInfo['picture'];
 
 		$this->load->view('admin_show_conversation', $data);
 	}
