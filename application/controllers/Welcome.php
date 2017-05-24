@@ -28,6 +28,13 @@ class Welcome extends CI_Controller {
 		$data['activeRoomId'] = $room?$room->id:0;
 		$data['availableUser'] = $this->m_user->getAvailableUserInRoom($roomId);
 
+		$data['checkIfRoomOwner'] = function($user)use($roomId){
+			return $this->m_chat_room->checkIfRoomOwner($roomId, $user);
+		};
+		$data['checkIfRoomMember'] = function($user)use($roomId){
+			return $this->m_chat_room->checkIfRoomMember($roomId, $user);
+		};
+
 		$this->load->view('welcome_message', $data);
 	}
 

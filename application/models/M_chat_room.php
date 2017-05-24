@@ -33,6 +33,42 @@ class M_chat_room extends CI_Model
 
     }
 
+    public function checkIfRoomOwner($room_id, $user_id)
+    {
+        $sql = '
+            SELECT 
+                cr.*,u.fullname, u.id as userId
+            FROM chat_room cr
+            LEFT JOIN user u
+            ON cr.owner = u.id
+            WHERE cr.id = ?
+            AND u.id = ?
+        ';
+
+        $query = $this->db->query($sql, [$room_id, $user_id]);
+
+        return $query->row();
+
+    }
+
+    public function checkIfRoomMember($room_id, $user_id)
+    {
+        $sql = '
+            SELECT 
+                cr.*,u.fullname, u.id as userId
+            FROM chat_room_members cr
+            LEFT JOIN user u
+            ON cr.member = u.id
+            WHERE cr.chat_room = ?
+            AND u.id = ?
+        ';
+
+        $query = $this->db->query($sql, [$room_id, $user_id]);
+
+        return $query->row();
+
+    }
+
     public function createRoom($data = FALSE){
 
         $this->db->insert('chat_room', $data);

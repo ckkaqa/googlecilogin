@@ -132,6 +132,10 @@
 </nav>
 
 <div class="container">
+	<?php 
+		$roomOwner = $checkIfRoomOwner($loggedInUserId);
+		$roomMember = $checkIfRoomMember($loggedInUserId);
+	?>
     <hr/>
     <div class="row">
         <div class = "col-md-3 text-left">
@@ -192,7 +196,7 @@
                                 <?php if ($member): ?>
                                     <?php foreach ($member as $y => $e):?>
                                         <div class="btn-group pull-left">
-                                        <?php if (!$loggedInUserId == $room->owner): ?>
+                                        <?php if ($e->userId != $room->owner ): ?>
                                         	<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
 	                                            <span class="glyphicon glyphicon-chevron-down"></span>
 	                                        </button>
@@ -254,16 +258,18 @@
                 <div class="panel-heading">
                     <span class="glyphicon glyphicon-comment"></span> Chat
                     <div class="btn-group pull-right">
-                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                            <span class="glyphicon glyphicon-chevron-down"></span>
-                        </button>
-                        <ul class="dropdown-menu slidedown">
-                            <li>
-                                <a href="#" data-toggle="modal" data-target=".bs-example-modal-md" >
-                                  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add member
-                                </a>
-                            </li>
-                        </ul>
+                    	<?php if ($roomOwner): ?>
+                    		<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+	                            <span class="glyphicon glyphicon-chevron-down"></span>
+	                        </button>
+	                        <ul class="dropdown-menu slidedown">
+	                            <li>
+	                                <a href="#" data-toggle="modal" data-target=".bs-example-modal-md" >
+	                                  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add member
+	                                </a>
+	                            </li>
+	                        </ul>
+                    	<?php endif ?>
                     </div>
                 </div>
                 <div id = "panel-body-1" class="panel-body" style="height:350px;">
@@ -273,20 +279,20 @@
 
                 </div>
 
-                <div class="panel-footer">
-                        <div class="">
-                            <form>
-                                <div class="input-group">
-                                   <input id="btn-input" type="text" class="message form-control" name = "message" placeholder="Type your message here..."/>
-                                   <span class="input-group-btn">
-                                        <input class = "btn btn-default btn-md sendMessage" id="btn-chat" type="submit" name="Send" value="Send" />
-                                   </span>
-                                </div>
-                            </form>
-
-                        </div>
-                    
-                </div>
+                <?php if ($roomMember): ?>
+                	<div class="panel-footer">
+	                    <div class="">
+	                        <form>
+	                            <div class="input-group">
+	                               <input id="btn-input" type="text" class="message form-control" name = "message" placeholder="Type your message here..."/>
+	                               <span class="input-group-btn">
+	                                    <input class = "btn btn-default btn-md sendMessage" id="btn-chat" type="submit" name="Send" value="Send" />
+	                               </span>
+	                            </div>
+	                        </form>
+	                    </div>
+	                </div>
+                <?php endif ?>
             </div>
         </div>
 
@@ -385,7 +391,7 @@
     $(".sendMessage").on('click', function(e){
             e.preventDefault();
             var message = $(".message").val();
-            var html = '<li class="left clearfix"><span class="chat-img pull-left"><img style = "height:50px;" src="<?php echo $picture ?>" alt="User Avatar" class="img-circle" /></span><div class="chat-body clearfix"><div class="header"><strong class="primary-font"><?php echo $fullname ?></strong> <small class="pull-right text-muted"><span class="glyphicon glyphicon-time"></span>Just Now</small></div><p>'+message+'.</p></div></li>';
+            var html = '<li class="right clearfix"><span class="chat-img pull-right"><img style = "height:50px;" src="<?php echo $picture ?>" alt="User Avatar" class="img-circle" /></span><div class="chat-body clearfix"><div class="header"><strong class="primary-font"><?php echo $fullname ?></strong> <small class="pull-right text-muted"><span class="glyphicon glyphicon-time"></span>Just Now</small></div><p>'+message+'.</p></div></li>';
 
             if (message != '')
             {
