@@ -21,6 +21,10 @@ class Welcome extends CI_Controller {
 		$rooms = $this->m_chat_room->getAllRoom();
 		$room = $this->m_chat_room->get($roomId);
 		$data['loggedInUserId'] = $user = $this->session->userdata('user_id');
+
+		if ($room && $room->status == 'private' && $this->m_user->checkIfUserInRoom($roomId, $user) == NULL) {
+			show_404();
+		}
 		$data['fullname'] = $userInfo['name'];
 		$data['picture'] = $userInfo['picture'];
 		$data['rooms'] = $rooms;

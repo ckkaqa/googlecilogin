@@ -76,4 +76,22 @@ class M_User extends CI_Model {
 		return $q->row();
 	}
 
+	public function checkIfUserInRoom($roomId, $userId)
+	{
+		$sql = '
+			SELECT 
+				*
+			FROM chat_room_members
+			WHERE chat_room = ?
+			AND member = ?
+		';
+
+		$q = $this->db->query($sql, array($roomId, $userId));
+
+		$result = $q->row();
+
+		return $result?true:false;
+
+	}
+
 }
