@@ -172,14 +172,12 @@ class M_chat_room extends CI_Model
             FROM chat_room_members cr
             LEFT JOIN user u
             ON cr.member = u.id
-            LEFT JOIN chat_room chr 
-            ON cr.chat_room = chr.id
             WHERE cr.chat_room = ?
             AND u.id = ?
-            AND chr.status = ?
+            AND cr.is_member_removed = ?
         ';
 
-        $query = $this->db->query($sql, [$room_id, $user_id, 'public']);
+        $query = $this->db->query($sql, [$room_id, $user_id, 0]);
 
         return $query->row();
 
