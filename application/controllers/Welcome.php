@@ -63,6 +63,9 @@ class Welcome extends CI_Controller {
 
 	public function createMessage($roomId = false)
 	{
+		if ($this->input->post('message') == "/leave") {
+			$this->kickMember($this->session->userdata('user_id'), $roomId);
+		}
 		$data['message'] = $this->input->post('message');
 		$date = date('Y-m-d H:i:s');
 		$data['created_at'] = $date;
@@ -99,10 +102,6 @@ class Welcome extends CI_Controller {
 	{
 		$ret = $this->m_chat_room->kickMember($userId, $roomId);
 		
-		if ($ret) {
-			
-		}
-
 		redirect('/welcome/index/'.$roomId);
 
 	}

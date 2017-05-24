@@ -430,7 +430,7 @@
                         console.log(status);
                         console.log(xhr);
                        console.log(arguments);
-                       alert('request failed');
+                       location.reload();
                     }
                 });
 
