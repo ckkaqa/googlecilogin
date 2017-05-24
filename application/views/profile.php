@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Codeigniter Sign In With Google+</title>
+	<title>CodeIgniter Simple Chat App</title>
 
 	<style type="text/css">
 	::selection{ background-color: #E13300; color: white; }
@@ -59,9 +59,7 @@
 	</style>
 </head>
 <body>
-<a href="https://github.com/moemoe89/google-login-ci3"><img style="position: absolute; top: 0; right: 0; border: 0; width: 149px; height: 149px;" src="http://aral.github.com/fork-me-on-github-retina-ribbons/right-graphite@2x.png" alt="Fork me on GitHub"></a>
-<div id="container">
-	<h1>CodeIgniter Sign In With Google+</h1>
+	<h1>CodeIgniter Simple Chat App</h1>
 
 	<div id="body">
 		<p>My Profile</p>
@@ -103,7 +101,7 @@
 			</tr>
 		</table>
 		
-		<p><a href="<?php echo site_url('welcome/logout');?>">Sign Out</a></p>
+		<p><a href="<?php echo site_url('welcome');?>">Back to Home</a></p>
 	
 	</div>
 
