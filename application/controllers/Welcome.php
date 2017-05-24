@@ -20,7 +20,7 @@ class Welcome extends CI_Controller {
 
 		$rooms = $this->m_chat_room->getAllRoom();
 		$room = $this->m_chat_room->get($roomId);
-		$data['loggedInUserId'] = $this->session->userdata('user_id');
+		$data['loggedInUserId'] = $user = $this->session->userdata('user_id');
 		$data['fullname'] = $userInfo['name'];
 		$data['picture'] = $userInfo['picture'];
 		$data['rooms'] = $rooms;
@@ -33,6 +33,10 @@ class Welcome extends CI_Controller {
 		};
 		$data['checkIfRoomMember'] = function($user)use($roomId){
 			return $this->m_chat_room->checkIfRoomMember($roomId, $user);
+		};
+
+		$data['checkIfMemberInRoom'] = function($status, $roomId)use($user){
+			return $this->m_chat_room->checkIfRoomAvailable($status, $roomId, $user);
 		};
 
 		$this->load->view('welcome_message', $data);

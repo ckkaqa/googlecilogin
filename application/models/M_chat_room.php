@@ -158,4 +158,26 @@ class M_chat_room extends CI_Model
         return $query->result();
     }
 
+    public function checkIfRoomAvailable($status, $room_id, $user_id)
+    {
+        if ($status == 'public'){
+            return true;
+        }
+
+        $sql = '
+            SELECT 
+                cr.*,u.fullname, u.id as userId
+            FROM chat_room_members cr
+            LEFT JOIN user u
+            ON cr.member = u.id
+            WHERE cr.chat_room = ?
+            AND u.id = ?
+        ';
+
+        $query = $this->db->query($sql, [$room_id, $user_id]);
+
+        return $query->row();
+
+    }
+
 }
