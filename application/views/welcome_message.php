@@ -182,7 +182,7 @@
                               <div class="panel-heading" role="tab" id="heading<?php echo $room->id?>">
                                 <h4 class="panel-title">
                                   <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $room->id?>" aria-expanded="false" aria-controls="collapse<?php echo $room->id?>">
-                                    <?php echo $room->name ?>
+                                    <?php echo $room->name ?> - (<?php echo $room->status?>)
                                   </a>
 
                                   <a href = "<?php echo site_url('welcome/index/'.$room->id) ?>" style = "float: right">
@@ -199,21 +199,31 @@
                                       <?php foreach ($member as $y => $e):?>
                                           <div class="btn-group pull-left">
                                           <?php if ($e->userId != $room->owner ): ?>
-                                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                                <span class="glyphicon glyphicon-chevron-down"></span>
-                                            </button>
-                                            <ul class="dropdown-menu slidedown">
-                                                <li>
-                                                    <a href="<?php echo site_url('welcome/kickMember/'.$e->userId.'/'.$room->id)?>" >
-                                                      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                                      <?php if ($loggedInUserId == $room->owner): ?>
-                                                      	Kick Member
-                                                      <?php else: ?>
-                                                      	Leave Room
-                                                      <?php endif ?>
-                                                    </a>
-                                                </li>
-                                            </ul>
+                                          	<?php if ($loggedInUserId == $room->owner): ?>
+	                                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+	                                                <span class="glyphicon glyphicon-chevron-down"></span>
+	                                            </button>
+	                                            <ul class="dropdown-menu slidedown">
+	                                                <li>
+	                                                    <a href="<?php echo site_url('welcome/kickMember/'.$e->userId.'/'.$room->id)?>" >
+	                                                      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+	                                                      	Kick Member
+	                                                    </a>
+	                                                </li>
+	                                            </ul>
+	                                            <?php elseif ($loggedInUserId == $e->userId): ?>
+	                                            	<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+	                                                <span class="glyphicon glyphicon-chevron-down"></span>
+	                                            </button>
+	                                            <ul class="dropdown-menu slidedown">
+	                                                <li>
+	                                                    <a href="<?php echo site_url('welcome/kickMember/'.$e->userId.'/'.$room->id)?>" >
+	                                                      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+	                                                      	Leave Room
+	                                                    </a>
+	                                                </li>
+	                                            </ul>
+	                                          <?php endif ?>
                                           <?php endif ?>
                                       </div>
                                       <p>&nbsp;&nbsp;<?php echo $e->fullname ?> &nbsp;<button type="button" class="btn btn-success btn-circle"></button></p>
