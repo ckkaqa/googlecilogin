@@ -87,7 +87,7 @@ class Welcome extends CI_Controller {
 
 			if ($ret) {
 				$member['chat_room'] = $ret; 
-				$member['member'] = 1;
+				$member['member'] = $this->session->userdata('user_id');
 				$this->m_chat_room->addChatRoomMember($member);
 			}
 

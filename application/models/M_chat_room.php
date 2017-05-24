@@ -94,7 +94,8 @@ class M_chat_room extends CI_Model
             $sql = 'SELECT c.*,u.fullname,u.id as userId
                  from chat_room_members c
                  LEFT JOIN user u on c.member = u.id
-                 where chat_room = '.$v->id.'
+                 where c.chat_room = '.$v->id.'
+                 AND c.is_member_removed = 0
             ';
             $data[$v->id]['room'] = $v;
             $data[$v->id]['room-members'] = $this->db->query($sql)->result();
@@ -106,9 +107,10 @@ class M_chat_room extends CI_Model
 
     public function kickMember($userId = FALSE, $roomId = FALSE)
     {
+        $data['is_member_removed'] = 1;
         $this->db->where('member', $userId);
         $this->db->where('chat_room', $roomId);
-        return $this->db->delete('chat_room_members');
+        return $this->db->update('chat_room_members', $data);
     }
 
     public function getRoomWithConversation($roomId)
@@ -170,11 +172,14 @@ class M_chat_room extends CI_Model
             FROM chat_room_members cr
             LEFT JOIN user u
             ON cr.member = u.id
+            LEFT JOIN chat_room chr 
+            ON cr.chat_room = chr.id
             WHERE cr.chat_room = ?
             AND u.id = ?
+            AND chr.status = ?
         ';
 
-        $query = $this->db->query($sql, [$room_id, $user_id]);
+        $query = $this->db->query($sql, [$room_id, $user_id, 'public']);
 
         return $query->row();
 

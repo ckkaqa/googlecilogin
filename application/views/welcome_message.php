@@ -205,7 +205,12 @@
                                             <ul class="dropdown-menu slidedown">
                                                 <li>
                                                     <a href="<?php echo site_url('welcome/kickMember/'.$e->userId.'/'.$room->id)?>" >
-                                                      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Kick Member
+                                                      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                      <?php if ($loggedInUserId == $room->owner): ?>
+                                                      	Kick Member
+                                                      <?php else: ?>
+                                                      	Leave Room
+                                                      <?php endif ?>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -259,7 +264,7 @@
         <div class="col-md-9">
             <div class="panel panel-default" <?php if (!$activeRoom) { echo 'hidden';} ?> >
                 <div class="panel-heading">
-                    <span class="glyphicon glyphicon-comment"></span> Chat
+                    <span class="glyphicon glyphicon-comment"></span> <?php if ($activeRoom) { echo $activeRoom->name; } ?>
                     <div class="btn-group pull-right">
                     	<?php if ($roomOwner): ?>
                     		<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
