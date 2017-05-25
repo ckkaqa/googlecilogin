@@ -111,36 +111,41 @@
 		</div>
 		<input type="hidden" name="" id = "is-checkedin" value="<?php echo $check?>">
 		<div class="col-md-6 text-right">
-			<a href="<?php echo site_url('login/profile/in')?>" class = "btn btn-default btn-lg" id = "checkedin">Check in</a>
-			<a href="javascript:;" class = "btn btn-default btn-lg" id = "checkedout">Check Out</a>
+			<a href="<?php echo site_url('login/addTimeLog/in')?>" class = "btn btn-default btn-lg" id = "checkedin">Check in</a>
+			<a href="<?php echo site_url('login/addTimeLog/out')?>" class = "btn btn-default btn-lg" id = "checkedout">Check Out</a>
 			<ul id = "log">
-				<li></li>
 			</ul>
 
 			<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
                 <thead>
+                	<tr class="text-center">
+                        <td colspan="2">Morning</td>
+                        <td colspan="2">Afternoon</td>
+                    </tr>
                     <tr>
-                        <th>Morning Time In</th>
-                        <th>Lunch Time out</th>
-                        <th>Lunch Time In</th>
-                        <th>Afternoon Time out</th>
+                        <th>Time In</th>
+                        <th>Time out</th>
+                        <th>Time In</th>
+                        <th>Time out</th>
                     </tr>
                 </thead>
                 <tfoot>
                     <tr>
-                        <th>Morning Time In</th>
-                        <th>Lunch Time out</th>
-                        <th>Lunch Time In</th>
-                        <th>Afternoon Time out</th>
+                        <th>Time In</th>
+                        <th>Time out</th>
+                        <th>Time In</th>
+                        <th>Time out</th>
                     </tr>
                 </tfoot>
                 <tbody>
-                    <tr>
-                        <td>time in</td>
-                        <td>time out</td>
-                        <td>time in</td>
-                        <td>time out</td>
-                    </tr>
+                	<?php foreach ($time_logs as $key => $v):?>
+                		<tr>
+                			<td><?php echo $v->time_log?></td>
+	                        <td>time</td>
+	                        <td>time in</td>
+	                        <td>time out</td>
+	                    </tr>
+                	<?php endforeach; ?>
                 </tbody>
             </table>
 
@@ -157,13 +162,15 @@
 
 	$(document).ready(function(){
 		var check = $('#is-checkedin').val();
-		if (check == 'in') {
-			$('#checkedout').hide();
-		}
+		// if (check == 'in') {
+		// 	$('#checkedout').hide();
+		// }else{
+		// 	$('#checkedin').hide();
+		// }
 		$('#checkedin').on('click', function(){
 			$('#checkedin').hide();
 			$('#checkedout').show();
-			$("#log").append("<li>Appended text</li>");
+			// $("#log").append("<li>Appended text</li>");
 		});
 		$('#checkedout').on('click', function(){
 			$('#checkedin').show();

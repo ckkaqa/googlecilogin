@@ -119,6 +119,23 @@ class M_User extends CI_Model {
 
 	}
 
+	public function getlastLogStatus($userId)
+	{
+
+		$sql = '
+			SELECT
+				*
+			FROM user_time_log
+			WHERE user_id = ?
+			ORDER BY time_log DESC
+		';
+
+		$q = $this->db->query($sql, [$userId]);
+
+		return $q->row();
+
+	}
+
 	public function getUser($user_id)
 	{
 		$query = $this->db

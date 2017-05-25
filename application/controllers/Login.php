@@ -45,26 +45,60 @@ class Login extends CI_Controller {
 	}
 
 	public function profile($check = false){
+		$this->load->model('m_user');
 		if($this->session->userdata('login') != true){
 			redirect('');
 		}
+		
+		$timeLogs = $this->m_user->getUserTimeLogs($this->session->userdata('user_id'));
 
-		if ($check != 'out') {
-			$check = 'in';
-		}
+		
 
-		// $date = date('Y-m-d H:i:s');
-		// $data['created_at'] = $date;
-		// $data['time_log'] = $date;
-		// $data['user_id'] = $this->session->userdata('user_id');
-		// $ins = $this->m_user->addTimeLog($data);
+		// if ($check && $check == 'in') {
+		// 	$check = 'out';
+		// }else{
+		// 	$check = 'in';
+		// }
 
 		$info = $contents['user_profile'] = $this->session->userdata('user_profile');
 		$contents['check'] = $check;
-		// $contents['time_logs'] = $this->m_user->getUserTimeLogs($this->session->userdata('user_id'));
+		$contents['time_logs'] = $timeLogs;
 
 		$this->load->view('profile',$contents);
 
+	}
+
+	public function addTimeLog($check)
+	{
+		$this->load->model('m_user');
+		$this->load->helper('date');
+		$status = 'morningin';
+		$timeLog = $this->m_user->getlastLogStatus($this->session->userdata('user_id'));
+		if ($timeLog && $check) {
+			$diff = timespan(strtotime($timeLog->time_log), strtotime(date('Y-m-d H:i:s')));
+
+			if ((int)$diff >= 10) {
+				$status = 'morningin';
+			}elseif ($timeLog->status == 'morningin') {
+				$status = 'morningout';
+			}elseif ($timeLog->status == 'morningout') {
+				$status = 'noonin';
+			}elseif ($timeLog->status == 'noonin') {
+				$status = 'noonout';
+			}
+
+			
+			
+			$date = date('Y-m-d H:i:s');
+			$data['created_at'] = $date;
+			$data['time_log'] = $date;
+			$data['status'] = $status;
+			$data['user_id'] = $this->session->userdata('user_id');
+			$ins = $this->m_user->addTimeLog($data);
+
+		}
+
+		redirect('login/profile');
 	}
 	
 	public function logout(){

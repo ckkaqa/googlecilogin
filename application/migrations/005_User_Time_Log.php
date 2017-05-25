@@ -16,11 +16,21 @@ class Migration_User_Time_Log extends CI_Migration {
 			'user_id' => array(
 				'type' => 'BIGINT',
 			),
-			'time_log' => array(
+			'morning_in_log' => array(
+				'type' => 'DATETIME',
+			),
+			'morning_out_log' => array(
+				'type' => 'DATETIME',
+			),
+			'noon_in_log' => array(
+				'type' => 'DATETIME',
+			),
+			'noon_out_log' => array(
 				'type' => 'DATETIME',
 			),
 			'status' => array(
-				'type' => 'INT',
+				'type' => 'VARCHAR',
+				'constraint' => 100,
 			),
 			'created_at' => array(
 				'type' => 'DATETIME',
