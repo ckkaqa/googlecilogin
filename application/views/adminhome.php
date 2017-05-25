@@ -26,7 +26,7 @@
                 <tr>
                     <td><?php echo $conversation->name?></td>
                     <td><?php echo $conversation->fullname?></td>
-                    <td><a href = "<?php echo site_url('admin/viewConversation/'.$conversation->id) ?>"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+                    <td><a href = "<?php echo site_url('admin/viewConversation/'.encode_url($conversation->id)) ?>"><span class="glyphicon glyphicon-eye-open"></span></a></td>
                   </tr>
             <?php } ?>
 

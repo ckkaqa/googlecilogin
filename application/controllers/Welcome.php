@@ -12,10 +12,13 @@ class Welcome extends CI_Controller {
 		$this->load->model('m_chat');
 		$this->load->model('m_chat_room');
 		$this->load->model('m_user');
+		$this->load->library('encrypt');
 	}
 
 	public function index($roomId=false)
 	{
+		$roomId = decode_url($roomId);
+
 		$userInfo = $this->session->userdata('user_profile');
 
 		$rooms = $this->m_chat_room->getAllRoom();

@@ -8,6 +8,7 @@ class Admin extends CI_Controller {
 		parent::__construct();
 		$this->load->model('m_chat_room');
 		$this->load->model('m_chat');
+		$this->load->library('encrypt');
 	}
 
 	public function home()
@@ -20,6 +21,7 @@ class Admin extends CI_Controller {
 
 	public function viewConversation($conversation_id)
 	{
+		$conversation_id = decode_url($conversation_id);
 		$data['conversation'] = $this->m_chat_room->getRoomWithConversation($conversation_id);
 		
 		$data['roomId'] = $conversation_id;

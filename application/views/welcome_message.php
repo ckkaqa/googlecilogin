@@ -185,7 +185,7 @@
                                     <?php echo $room->name ?> - (<?php echo $room->status?>)
                                   </a>
 
-                                  <a href = "<?php echo site_url('welcome/index/'.$room->id) ?>" style = "float: right">
+                                  <a href = "<?php echo site_url('welcome/index/'.encode_url($room->id)) ?>" style = "float: right">
                                       <span class = "glyphicon glyphicon-share-alt"></span>
                                   </a>
                                 </h4>
