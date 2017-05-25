@@ -9,26 +9,27 @@
 </head>
 <body>
 
-
     <div class="container">
-      <h2>Conversations</h2>
-      <p>Show all</p>            
+      <h2>Setup user creds</h2>
+      <p>Users</p>            
       <table class="table">
         <thead>
           <tr>
-            <th>Room Name</th>
-            <th>Room Owner</th>
+            <th>Username</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-            <?php foreach ($conversations as $conversation) { ?>
+        <?php if ($users): ?>
+            <?php foreach ($users as $user): ?>
                 <tr>
-                    <td><?php echo $conversation->name?></td>
-                    <td><?php echo $conversation->fullname?></td>
-                    <td><a href = "<?php echo site_url('admin/viewConversation/'.$conversation->id) ?>"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+                    <td><?php echo $user->fullname?></td>
+                    <td>
+                    <a href = "<?php echo site_url('admin/setupUserCreds/'.encode_url($user->id)) ?>"><span class="glyphicon glyphicon-wrench"></span></a>
+                    </td>
                   </tr>
-            <?php } ?>
+            <?php endforeach ?>
+        <?php endif ?>
 
         </tbody>
       </table>

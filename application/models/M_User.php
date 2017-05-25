@@ -119,4 +119,12 @@ class M_User extends CI_Model {
 
 	}
 
+	public function getUser($user_id)
+	{
+		$query = $this->db
+			->where('id', $user_id)
+			->get('user');
+
+		return $query->row();
+	}
 }
