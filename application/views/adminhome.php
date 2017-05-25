@@ -8,7 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
-
+    <a href = "<?php echo site_url('admin/setup') ?>" class = "btn btn-default">View All user logins</a>
 
     <div class="container">
       <h2>Conversations</h2>
