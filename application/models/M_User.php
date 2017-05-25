@@ -84,9 +84,10 @@ class M_User extends CI_Model {
 			FROM chat_room_members
 			WHERE chat_room = ?
 			AND member = ?
+			AND is_member_removed = ?
 		';
 
-		$q = $this->db->query($sql, array($roomId, $userId));
+		$q = $this->db->query($sql, array($roomId, $userId, 0));
 
 		$result = $q->row();
 
