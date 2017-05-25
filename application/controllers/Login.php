@@ -44,13 +44,25 @@ class Login extends CI_Controller {
 		redirect('welcome/index');
 	}
 
-	public function profile(){
-		
-
+	public function profile($check = false){
 		if($this->session->userdata('login') != true){
 			redirect('');
 		}
+
+		if ($check != 'out') {
+			$check = 'in';
+		}
+
+		// $date = date('Y-m-d H:i:s');
+		// $data['created_at'] = $date;
+		// $data['time_log'] = $date;
+		// $data['user_id'] = $this->session->userdata('user_id');
+		// $ins = $this->m_user->addTimeLog($data);
+
 		$info = $contents['user_profile'] = $this->session->userdata('user_profile');
+		$contents['check'] = $check;
+		// $contents['time_logs'] = $this->m_user->getUserTimeLogs($this->session->userdata('user_id'));
+
 		$this->load->view('profile',$contents);
 
 	}

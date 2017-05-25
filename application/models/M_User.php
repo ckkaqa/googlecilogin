@@ -95,4 +95,28 @@ class M_User extends CI_Model {
 
 	}
 
+	public function addTimeLog($data)
+	{
+
+		$this->db->insert('user_time_log', $data);
+    	return $this->db->insert_id();
+    	
+	}
+
+	public function getUserTimeLogs($userId)
+	{
+
+		$sql = '
+			SELECT
+				*
+			FROM user_time_log
+			WHERE user_id = ?
+		';
+
+		$q = $this->db->query($sql, [$userId]);
+
+		return $q->result();
+
+	}
+
 }

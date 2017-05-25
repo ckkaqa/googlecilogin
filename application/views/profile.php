@@ -3,7 +3,12 @@
 <head>
 	<meta charset="utf-8">
 	<title>CodeIgniter Simple Chat App</title>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
 	<style type="text/css">
 	::selection{ background-color: #E13300; color: white; }
 	::moz-selection{ background-color: #E13300; color: white; }
@@ -61,52 +66,112 @@
 <body>
 	<h1>CodeIgniter Simple Chat App</h1>
 
-	<div id="body">
-		<p>My Profile</p>
-		<table>
-			<tr>
-				<td>ID</td>
-				<td>:</td>
-				<td><?php echo @$user_profile['id'];?></td>
-			</tr>
-			<tr>
-				<td>Name</td>
-				<td>:</td>
-				<td><?php echo @$user_profile['name'];?></td>
-			</tr>
-			<tr>
-				<td>First Name</td>
-				<td>:</td>
-				<td><?php echo @$user_profile['given_name'];?></td>
-			</tr>
-			<tr>
-				<td>Last Name</td>
-				<td>:</td>
-				<td><?php echo @$user_profile['family_name'];?></td>
-			</tr>
-			<tr>
-				<td>Email</td>
-				<td>:</td>
-				<td><?php echo @$user_profile['email'];?></td>
-			</tr>
-			<tr>
-				<td>Gender</td>
-				<td>:</td>
-				<td><?php echo @$user_profile['gender'];?></td>
-			</tr>
-			<tr>
-				<td>Photo</td>
-				<td>:</td>
-				<td><img src="<?php echo $user_profile['picture'];?>" width="200"></td>
-			</tr>
-		</table>
-		
-		<p><a href="<?php echo site_url('welcome');?>">Back to Home</a></p>
-	
+	<div class = "container">
+		<div class="col-md-6">
+			<p>My Profile</p>
+			<table>
+				<tr>
+					<td>ID</td>
+					<td>:</td>
+					<td><?php echo @$user_profile['id'];?></td>
+				</tr>
+				<tr>
+					<td>Name</td>
+					<td>:</td>
+					<td><?php echo @$user_profile['name'];?></td>
+				</tr>
+				<tr>
+					<td>First Name</td>
+					<td>:</td>
+					<td><?php echo @$user_profile['given_name'];?></td>
+				</tr>
+				<tr>
+					<td>Last Name</td>
+					<td>:</td>
+					<td><?php echo @$user_profile['family_name'];?></td>
+				</tr>
+				<tr>
+					<td>Email</td>
+					<td>:</td>
+					<td><?php echo @$user_profile['email'];?></td>
+				</tr>
+				<tr>
+					<td>Gender</td>
+					<td>:</td>
+					<td><?php echo @$user_profile['gender'];?></td>
+				</tr>
+				<tr>
+					<td>Photo</td>
+					<td>:</td>
+					<td><img src="<?php echo $user_profile['picture'];?>" width="200"></td>
+				</tr>
+			</table>
+			
+			<p><a href="<?php echo site_url('welcome');?>">Back to Home</a></p>
+		</div>
+		<input type="hidden" name="" id = "is-checkedin" value="<?php echo $check?>">
+		<div class="col-md-6 text-right">
+			<a href="<?php echo site_url('login/profile/in')?>" class = "btn btn-default btn-lg" id = "checkedin">Check in</a>
+			<a href="javascript:;" class = "btn btn-default btn-lg" id = "checkedout">Check Out</a>
+			<ul id = "log">
+				<li></li>
+			</ul>
+
+			<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Morning Time In</th>
+                        <th>Lunch Time out</th>
+                        <th>Lunch Time In</th>
+                        <th>Afternoon Time out</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Morning Time In</th>
+                        <th>Lunch Time out</th>
+                        <th>Lunch Time In</th>
+                        <th>Afternoon Time out</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <tr>
+                        <td>time in</td>
+                        <td>time out</td>
+                        <td>time in</td>
+                        <td>time out</td>
+                    </tr>
+                </tbody>
+            </table>
+
+		</div>
 	</div>
 
 	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds</p>
 </div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+        $('#example').DataTable();
+    } );
+
+	$(document).ready(function(){
+		var check = $('#is-checkedin').val();
+		if (check == 'in') {
+			$('#checkedout').hide();
+		}
+		$('#checkedin').on('click', function(){
+			$('#checkedin').hide();
+			$('#checkedout').show();
+			$("#log").append("<li>Appended text</li>");
+		});
+		$('#checkedout').on('click', function(){
+			$('#checkedin').show();
+			$('#checkedout').hide();
+		});
+	});
+
+</script>
 
 </body>
 </html>
