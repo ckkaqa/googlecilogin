@@ -52,13 +52,6 @@ class Login extends CI_Controller {
 		
 		$timeLogs = $this->m_user->getUserTimeLogs($this->session->userdata('user_id'));
 
-		
-
-		// if ($check && $check == 'in') {
-		// 	$check = 'out';
-		// }else{
-		// 	$check = 'in';
-		// }
 
 		$info = $contents['user_profile'] = $this->session->userdata('user_profile');
 		$contents['check'] = $check;
@@ -79,7 +72,9 @@ class Login extends CI_Controller {
 			
 			$diff = timespan(strtotime($timeLog->morning_in_log), strtotime(date('Y-m-d H:i:s')));
 
-			if ((int)$diff >= 12) {
+			$time_diff = round(abs(strtotime(date('Y-m-d H:i:s')) - strtotime($timeLog->morning_in_log)) / 60 / 60,2);
+
+			if ((int)$time_diff >= 12) {
 				$status = 'morningin';
 				$stat = 'morning_in_log';
 			}elseif ($timeLog->status == 'morningin') {

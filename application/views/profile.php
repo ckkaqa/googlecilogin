@@ -157,8 +157,11 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-        $('#example').DataTable();
+        $('#example').DataTable( {
+        	"order": [[ 0, "desc" ]]
+    	} );
     } );
+
 
 	$(document).ready(function(){
 		var check = $('#is-checkedin').val();
@@ -170,7 +173,6 @@
 		$('#checkedin').on('click', function(){
 			$('#checkedin').hide();
 			$('#checkedout').show();
-			// $("#log").append("<li>Appended text</li>");
 		});
 		$('#checkedout').on('click', function(){
 			$('#checkedin').show();
