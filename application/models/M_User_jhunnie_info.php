@@ -1,4 +1,7 @@
 <?php
+/**
+ * @author Jhunnie  
+ */
 class M_User_jhunnie_info extends CI_Model {
 	
 	public function insert($data){

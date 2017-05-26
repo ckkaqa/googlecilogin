@@ -25,7 +25,8 @@
                 <tr>
                     <td><?php echo $user->fullname?></td>
                     <td>
-                    <a href = "<?php echo site_url('admin/setupUserCreds/'.encode_url($user->id)) ?>"><span class="glyphicon glyphicon-wrench"></span></a>
+                    <a href = "<?php echo site_url('admin/setupUserCreds/'.encode_url($user->id)) ?>"><span class="glyphicon glyphicon-wrench"></span>&nbsp;Setup</a>
+                    <a href = "<?php echo site_url('admin/viewUserLog/'.encode_url($user->id)) ?>"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;View Employee Log</a>
                     </td>
                   </tr>
             <?php endforeach ?>

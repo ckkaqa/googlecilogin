@@ -11,6 +11,7 @@ class Admin extends CI_Controller {
 		$this->load->library('encrypt');
 		$this->load->model('m_user');
 		$this->load->model('m_user_jhunnie_info');
+		$this->load->model('m_user_time_log');
 	}
 
 	public function home()
@@ -58,6 +59,40 @@ class Admin extends CI_Controller {
 		}
 
 		$this->load->view('admin_user_setup', $data);
+	}
+
+	public function viewUserLog($user_id)
+	{
+		$user_id = decode_url($user_id);
+		$data['time_logs'] = $this->m_user->getUserTimeLogs($user_id);
+		$data['user'] = $this->m_user->getUser($user_id);
+
+		if ($this->input->post())
+		{
+			$updateArray = array();
+			$id = $this->input->post('id');
+			$morning_in_log = $this->input->post('morning_in_log');
+			$morning_out_log = $this->input->post('morning_out_log');
+			$noon_in_log = $this->input->post('noon_in_log');
+			$noon_out_log = $this->input->post('noon_out_log');
+
+			for($x = 0; $x < sizeof($id); $x++){
+
+			    $updateArray[] = array(
+			        'id'=>$id[$x],
+			        'morning_in_log' => date("Y-m-d H:i", strtotime($morning_in_log[$x])),
+			        'morning_out_log' => date("Y-m-d H:i", strtotime($morning_out_log[$x])),
+			        'noon_in_log' => date("Y-m-d H:i", strtotime($noon_in_log[$x])),
+			        'noon_out_log' => date("Y-m-d H:i", strtotime($noon_out_log[$x])),
+			    );
+			}  
+
+			$this->m_user_time_log->update_user_logs($updateArray);
+
+			redirect(current_url());
+		}
+
+		$this->load->view('admin_user_time_log', $data);
 	}
 
 	public function viewConversation($conversation_id)

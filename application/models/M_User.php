@@ -136,6 +136,7 @@ class M_User extends CI_Model {
 				*
 			FROM user_time_log
 			WHERE user_id = ?
+			ORDER BY morning_in_log DESC
 		';
 
 		$q = $this->db->query($sql, [$userId]);
