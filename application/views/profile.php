@@ -67,7 +67,7 @@
 	<h1>CodeIgniter Simple Chat App</h1>
 
 	<div class = "container">
-		<div class="col-md-5">
+		<div class="col-md-4">
 			<p>My Profile</p>
 			<table>
 				<tr>
@@ -110,40 +110,78 @@
 			<p><a href="<?php echo site_url('welcome');?>">Back to Home</a></p>
 		</div>
 		<input type="hidden" name="" id = "is-checkedin" value="<?php echo $check?>">
-		<div class="col-md-7 text-right">
+		<div class="col-md-8 text-right">
 			<a href="<?php echo site_url('login/addTimeLog/in')?>" class = "btn btn-default btn-lg" id = "checkedin">Check in</a>
 			<a href="<?php echo site_url('login/addTimeLog/out')?>" class = "btn btn-default btn-lg" id = "checkedout">Check Out</a>
 			<ul id = "log">
 			</ul>
 
-			<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+			<table id="example" class="table table-striped table-bordered " cellspacing="0" width="100%">
+			<?php if ($salaryRate): ?>
+				<?php 
+					$dsalary = $salaryRate->salary_rate/20;
+					$hsalary = $dsalary/8;
+				?>
+			<?php endif ?>
                 <thead>
                 	<tr class="text-center">
-                        <td colspan="2">Morning</td>
-                        <td colspan="2">Afternoon</td>
+                		<td ></td>
+                        <td colspan="2">1st Half (<?php echo date('h:i a',strtotime($salaryRate->work_start))?>)</td>
+                        <td colspan="2">2nd Half (<?php echo date('h:i a',strtotime($salaryRate->work_end))?>)</td>
+                        <td >Hours</td>
+                        <td >Salary</td>
                     </tr>
-                    <tr>
+                    <tr >
+                        <th>Date</th>
                         <th>Time In</th>
                         <th>Time out</th>
                         <th>Time In</th>
                         <th>Time out</th>
+                        <th>( 8 hours )</th>
+                        <th>( P <?php echo $dsalary ?>.00 )</th>
                     </tr>
                 </thead>
                 <tfoot>
-                    <tr>
+                    <tr class="text-center">
+                        <th></th>
                         <th>Time In</th>
                         <th>Time out</th>
                         <th>Time In</th>
                         <th>Time out</th>
+                        <th>Hours</th>
+                        <th>( P <?php echo $hsalary?>.00 )</th>
                     </tr>
                 </tfoot>
                 <tbody>
                 	<?php foreach ($time_logs as $key => $v):?>
-                		<tr>
-                			<td><?php echo $v->morning_in_log?></td>
-                			<td><?php echo $v->morning_out_log == '0000-00-00 00:00:00' ? '' : $v->morning_out_log ?></td>
-                			<td><?php echo $v->noon_in_log == '0000-00-00 00:00:00' ? '' : $v->noon_in_log ?></td>
-                			<td><?php echo $v->noon_out_log == '0000-00-00 00:00:00' ? '' : $v->noon_out_log ?></td>
+                		<?php 
+                			$hours = $getHours($v->id);
+
+                		?>
+                		<tr class = "text-left">
+                			<td><?php echo date('F d, Y',strtotime($v->morning_in_log)); ?></td>
+                			<td><?php echo date('h:i a',strtotime($v->morning_in_log)); ?></td>
+                			<td><?php echo $v->morning_out_log == '0000-00-00 00:00:00' ? '' : date('h:i a',strtotime($v->morning_out_log)); ?></td>
+                			<td><?php echo $v->noon_in_log == '0000-00-00 00:00:00' ? '' : date('h:i a',strtotime($v->noon_in_log)) ?></td>
+                			<td><?php echo $v->noon_out_log == '0000-00-00 00:00:00' ? '' : date('h:i a',strtotime($v->noon_out_log)); ?></td>
+                			<td>
+	                			<?php 
+	                			if ($v->noon_out_log != '0000-00-00 00:00:00') {
+	                				echo $hours->hours;
+	                				$numHours = $hours->hours;
+	                				// echo(round($hours->hours,2));
+	                			}else{
+	                				echo '0';
+	                				$numHours = 0;
+	                			}
+
+	                			?>
+                			</td>
+                			<td>P
+	                			<?php 
+	                				echo $hsalary*$numHours;
+	                			?>
+                			</td>
 	                    </tr>
                 	<?php endforeach; ?>
                 </tbody>

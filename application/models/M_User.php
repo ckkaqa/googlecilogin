@@ -112,6 +112,22 @@ class M_User extends CI_Model {
     	
 	}
 
+	public function getDailyHour($id)
+	{
+
+		$sql = '
+			SELECT 
+				TIME_TO_SEC(TIMEDIFF(noon_out_log, morning_in_log))/3600 as hours
+			FROM user_time_log
+			WHERE id = ?
+		';
+		
+		$q = $this->db->query($sql, [$id]);
+		$result = $q->row();
+		return $result;
+    	
+	}
+
 	public function getUserTimeLogs($userId)
 	{
 

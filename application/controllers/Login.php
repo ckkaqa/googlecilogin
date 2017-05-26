@@ -46,14 +46,23 @@ class Login extends CI_Controller {
 
 	public function profile($check = false){
 		$this->load->model('m_user');
+		$this->load->model('m_User_jhunnie_info');
+
 		if($this->session->userdata('login') != true){
 			redirect('');
 		}
 		
 		$timeLogs = $this->m_user->getUserTimeLogs($this->session->userdata('user_id'));
+		$salaryRate = $this->m_User_jhunnie_info->get($this->session->userdata('user_id'));
+
+		$contents['getHours'] = function($id)
+		{
+			return $this->m_user->getDailyHour($id);
+		};
 
 
 		$info = $contents['user_profile'] = $this->session->userdata('user_profile');
+		$contents['salaryRate'] = $salaryRate;
 		$contents['check'] = $check;
 		$contents['time_logs'] = $timeLogs;
 
@@ -65,6 +74,7 @@ class Login extends CI_Controller {
 	{
 		$this->load->model('m_user');
 		$this->load->helper('date');
+
 		$status = 'morningin';
 		$stat = 'morning_in_log';
 		$timeLog = $this->m_user->getlastLogStatus($this->session->userdata('user_id'));
