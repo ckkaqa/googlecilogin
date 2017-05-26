@@ -73,29 +73,38 @@ class Login extends CI_Controller {
 		$this->load->model('m_user');
 		$this->load->helper('date');
 		$status = 'morningin';
+		$stat = 'morning_in_log';
 		$timeLog = $this->m_user->getlastLogStatus($this->session->userdata('user_id'));
-		if ($timeLog && $check) {
-			$diff = timespan(strtotime($timeLog->time_log), strtotime(date('Y-m-d H:i:s')));
+		if ($timeLog) {
+			
+			$diff = timespan(strtotime($timeLog->morning_in_log), strtotime(date('Y-m-d H:i:s')));
 
-			if ((int)$diff >= 10) {
+			if ((int)$diff >= 12) {
 				$status = 'morningin';
+				$stat = 'morning_in_log';
 			}elseif ($timeLog->status == 'morningin') {
 				$status = 'morningout';
+				$stat = 'morning_out_log';
 			}elseif ($timeLog->status == 'morningout') {
 				$status = 'noonin';
+				$stat = 'noon_in_log';
 			}elseif ($timeLog->status == 'noonin') {
 				$status = 'noonout';
+				$stat = 'noon_out_log';
 			}
 
-			
-			
+		}
+		if ($check) {
 			$date = date('Y-m-d H:i:s');
 			$data['created_at'] = $date;
-			$data['time_log'] = $date;
+			$data[$stat] = $date;
 			$data['status'] = $status;
 			$data['user_id'] = $this->session->userdata('user_id');
-			$ins = $this->m_user->addTimeLog($data);
-
+			if ($status == 'morningin') {
+				$ins = $this->m_user->addTimeLog($data);	
+			}else{
+				$ins = $this->m_user->updateTimeLog($data, $timeLog->id);
+			}
 		}
 
 		redirect('login/profile');

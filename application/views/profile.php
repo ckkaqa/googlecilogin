@@ -67,7 +67,7 @@
 	<h1>CodeIgniter Simple Chat App</h1>
 
 	<div class = "container">
-		<div class="col-md-6">
+		<div class="col-md-5">
 			<p>My Profile</p>
 			<table>
 				<tr>
@@ -110,7 +110,7 @@
 			<p><a href="<?php echo site_url('welcome');?>">Back to Home</a></p>
 		</div>
 		<input type="hidden" name="" id = "is-checkedin" value="<?php echo $check?>">
-		<div class="col-md-6 text-right">
+		<div class="col-md-7 text-right">
 			<a href="<?php echo site_url('login/addTimeLog/in')?>" class = "btn btn-default btn-lg" id = "checkedin">Check in</a>
 			<a href="<?php echo site_url('login/addTimeLog/out')?>" class = "btn btn-default btn-lg" id = "checkedout">Check Out</a>
 			<ul id = "log">
@@ -140,10 +140,10 @@
                 <tbody>
                 	<?php foreach ($time_logs as $key => $v):?>
                 		<tr>
-                			<td><?php echo $v->time_log?></td>
-	                        <td>time</td>
-	                        <td>time in</td>
-	                        <td>time out</td>
+                			<td><?php echo $v->morning_in_log?></td>
+                			<td><?php echo $v->morning_out_log == '0000-00-00 00:00:00' ? '' : $v->morning_out_log ?></td>
+                			<td><?php echo $v->noon_in_log == '0000-00-00 00:00:00' ? '' : $v->noon_in_log ?></td>
+                			<td><?php echo $v->noon_out_log == '0000-00-00 00:00:00' ? '' : $v->noon_out_log ?></td>
 	                    </tr>
                 	<?php endforeach; ?>
                 </tbody>

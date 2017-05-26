@@ -103,6 +103,15 @@ class M_User extends CI_Model {
     	
 	}
 
+	public function updateTimeLog($data, $id)
+	{
+
+		$this->db->where('id', $id);
+		$this->db->update('user_time_log', $data);
+    	return $this->db->insert_id();
+    	
+	}
+
 	public function getUserTimeLogs($userId)
 	{
 
@@ -127,7 +136,7 @@ class M_User extends CI_Model {
 				*
 			FROM user_time_log
 			WHERE user_id = ?
-			ORDER BY time_log DESC
+			ORDER BY created_at DESC
 		';
 
 		$q = $this->db->query($sql, [$userId]);
