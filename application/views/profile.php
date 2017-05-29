@@ -111,8 +111,18 @@
 		</div>
 		<input type="hidden" name="" id = "is-checkedin" value="<?php echo $check?>">
 		<div class="col-md-8 text-right">
+			<?php if ($timeLog): ?>
+				<?php if ($timeLog->status == 'morningin' || $timeLog->status == 'noonin'): ?>
+					<a href="<?php echo site_url('login/addTimeLog/out')?>" class = "btn btn-default btn-lg" id = "checkedout">Check Out</a>
+				<?php elseif($timeLog->status == 'morningout' || $timeLog->status == 'noonout'): ?>
+					<a href="<?php echo site_url('login/addTimeLog/in')?>" class = "btn btn-default btn-lg" id = "checkedin">Check in</a>
+				<?php endif ?>
+			<?php else: ?>
 				<a href="<?php echo site_url('login/addTimeLog/in')?>" class = "btn btn-default btn-lg" id = "checkedin">Check in</a>
-				<a href="<?php echo site_url('login/addTimeLog/out')?>" class = "btn btn-default btn-lg" id = "checkedout">Check Out</a>
+			<?php endif ?>
+			<!-- <?php if ($timeLog && $timeLog->status != 'noonout'): ?>
+				<a href="<?php echo site_url('login/addTimeLog/ootd')?>" class = "btn btn-default btn-lg" id = "checkedin">Out for the Day</a>
+			<?php endif ?> -->
 			<ul id = "log">
 			</ul>
 
@@ -172,20 +182,15 @@
                 			<td>
 	                			<?php 
 	                			if ($v->noon_out_log != '0000-00-00 00:00:00') {
-	                				echo $hours->hours;
-	                				$numHours = $hours->hours;
+	                				$brhour = $breakHour($v->id);
+	                				echo round($brhour, 2);
 	                				// echo(round($hours->hours,2));
-	                			}else{
-	                				echo '0';
-	                				$numHours = 0;
 	                			}
 
 	                			?>
                 			</td>
-                			<td>P
-	                			<?php 
-	                				echo $hsalary*$numHours;
-	                			?>
+                			<td>
+	                			<?php echo $v->salary_receive ? 'P '.number_format($v->salary_receive, 2) : '' ?>
                 			</td>
 	                    </tr>
                 	<?php endforeach; ?>

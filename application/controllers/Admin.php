@@ -106,13 +106,15 @@ class Admin extends CI_Controller {
 		$totalDailyHour = $this->m_user->getDailyHour($user_log_id);
 		$day_break = $this->m_user->getDailyBreak($user_log_id);
 
-		if ($day_break->hours < 0)
+		if ($day_break->hours < 1)
 		{
 			$hoursActive = $totalDailyHour != null && $day_break ? $totalDailyHour->hours - 1 : 0;
+			$breakHours = $totalDailyHour != null && $day_break ? 1 : 0;
 		}else{
 			$hoursActive = $totalDailyHour != null && $day_break ? $totalDailyHour->hours - $day_break->hours : 0;
+			$breakHours = $totalDailyHour != null && $day_break ? $day_break->hours : 0;
 		}
-		
+
 		$data['salary_rate'] = $userRate ? $userRate->salary_rate : false;
 
 		$userDaily = $userRate ? $userRate->salary_rate/20 : 0;
@@ -123,8 +125,18 @@ class Admin extends CI_Controller {
 		$data['late'] = $lateMin * $userHourly;
 		$data['overtime'] = $otMin * $userHourly;
 		// night diff %total hrs rate * .20
-		$data['night_diff'] = false;
-		$salary = $userDaily - $data['late'] + $data['overtime'];
+		$fnight_diff = $this->getNightDifference(strtotime($timelog->morning_in_log), strtotime($timelog->morning_out_log));
+		$snight_diff = $this->getNightDifference(strtotime($timelog->noon_in_log), strtotime($timelog->noon_out_log));
+		$anight_diff = $this->getNightDifference(strtotime($timelog->morning_in_log), strtotime($timelog->noon_out_log));
+
+		if ($fnight_diff + $snight_diff == $anight_diff) {
+			$night_diff = $fnight_diff + $snight_diff;			
+		}else{
+			$night_diff = $anight_diff - $breakHours;
+		}
+
+		$data['night_diff'] = $night_diff == 0 ? 0: ($night_diff) * ($userHourly * .20);
+		$salary = $userDaily - $data['late'] + $data['overtime'] + $data['night_diff'];
 		$data['salary_receive'] = $salary;
 		
 		// echo "<pre>";
@@ -135,6 +147,44 @@ class Admin extends CI_Controller {
 		$this->m_user_payroll->recompute($user_log_id, $data);
 
 		redirect(site_url('admin/viewUserLog/'.$user_id));
+	}
+
+	public function getNightDifference($start_work,$end_work)
+	{
+
+	    $start_night = mktime('22','00','00',date('m',$start_work),date('d',$start_work),date('Y',$start_work));
+	    $end_night   = mktime('06','00','00',date('m',$start_work),date('d',$start_work) + 1,date('Y',$start_work));
+
+	    if($start_work >= $start_night && $start_work <= $end_night)
+	    {
+	        if($end_work >= $end_night)
+	        {
+	            return ($end_night - $start_work) / 3600;
+	        }
+	        else
+	        {
+	            return ($end_work - $start_work) / 3600;
+	        }
+	    }
+	    elseif($end_work >= $start_night && $end_work <= $end_night)
+	    {
+	        if($start_work <= $start_night)
+	        {
+	            return ($end_work - $start_night) / 3600;
+	        }
+	        else
+	        {
+	            return ($end_work - $start_work) / 3600;
+	        }
+	    }
+	    else
+	    {
+	        if($start_work < $start_night && $end_work > $end_night)
+	        {
+	            return ($end_night - $start_night) / 3600;
+	        }
+	        return 0;
+	    }
 	}
 
 	public function viewConversation($conversation_id)

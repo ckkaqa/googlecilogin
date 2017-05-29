@@ -17,12 +17,17 @@
 </head>
 <body>
     <a href = "<?php echo site_url('admin/setup') ?>" class = "btn btn-default">View All user logins</a>
-    <div class="container">
-      <h2><?php echo $user->fullname ?></h2>
-      <p>Time log</p>            
+    <div class="row">
+    <div class="col-md-12">
+      <div style="padding-left: 25px;">
+        <h2><?php echo $user->fullname ?></h2>
+        <p>Time log</p>            
+      </div>
       
       <form method = "post" action = "<?php echo site_url('admin/viewUserLog/'.encode_url($user->id)) ?>">
-        <input type="submit" class = "btn btn-default" name="Submit" value = "Save Changes">
+        <div style="float: right;padding-right: 25px;">
+          <input type="submit" class = "btn btn-default btn-lg" name="Submit" value = "Save Changes">
+        </div>
         <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
               <thead>
                 <tr class="text-center">
@@ -35,7 +40,7 @@
                       <th>Time out</th>
                       <th>Time In</th>
                       <th>Time out</th>
-                      <th>Daily Salary</th>
+                      <th>Monthly Salary</th>
                       <th>Late(min)</th>
                       <th>OT(min)</th>
                       <th>Night Diff(min)</th>
@@ -49,7 +54,7 @@
                       <th>Time out</th>
                       <th>Time In</th>
                       <th>Time out</th>
-                      <th>Daily Salary</th>
+                      <th>Monthly Salary</th>
                       <th>Late(min)</th>
                       <th>OT(min)</th>
                       <th>Night Diff(min)</th>
@@ -114,6 +119,7 @@
 
         </form>
 
+    </div>
     </div>
 
 </body>

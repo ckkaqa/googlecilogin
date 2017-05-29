@@ -62,9 +62,24 @@ class Login extends CI_Controller {
 		};
 
 
+		$contents['breakHour'] = function($timeLogId){
+			$totalDailyHour = $this->m_user->getDailyHour($timeLogId);
+			$day_break = $this->m_user->getDailyBreak($timeLogId);
+
+			if ($day_break->hours < 0)
+			{
+				$hoursActive = $totalDailyHour != null && $day_break ? $totalDailyHour->hours - 1 : 0;
+			}else{
+				$hoursActive = $totalDailyHour != null && $day_break ? $totalDailyHour->hours - $day_break->hours : 0;
+			}
+
+			return $hoursActive;
+		};
+
 		$info = $contents['user_profile'] = $this->session->userdata('user_profile');
+
 		$contents['salaryRate'] = $salaryRate;
-		// $contents['check_log'] = $timeLog->check_log;
+		$contents['timeLog'] = $timeLog;
 		$contents['check'] = $check;
 		$contents['time_logs'] = $timeLogs;
 
@@ -86,7 +101,7 @@ class Login extends CI_Controller {
 
 			$time_diff = round(abs(strtotime(date('Y-m-d H:i:s')) - strtotime($timeLog->morning_in_log)) / 60 / 60,2);
 
-			if ((int)$time_diff >= 12) {
+			if ($time_diff >= 12) {
 				$status = 'morningin';
 				$stat = 'morning_in_log';
 			}elseif ($timeLog->status == 'morningin') {
@@ -98,23 +113,123 @@ class Login extends CI_Controller {
 			}elseif ($timeLog->status == 'noonin') {
 				$status = 'noonout';
 				$stat = 'noon_out_log';
+				$this->computePayroll($this->session->userdata('user_id'), $timeLog->id);
 			}
 
 		}
 		if ($check) {
-			$date = date('Y-m-d H:i:s');
-			$data['created_at'] = $date;
-			$data[$stat] = $date;
-			$data['status'] = $status;
-			$data['user_id'] = $this->session->userdata('user_id');
-			if ($status == 'morningin') {
-				$ins = $this->m_user->addTimeLog($data);	
+			if ($check == 'ootd') {
+				$date = date('Y-m-d H:i:s');
+				$data['created_at'] = $date;
+				$data['noon_out_log'] = $date;
+				$data['status'] = 'noonout';
+				$data['user_id'] = $this->session->userdata('user_id');
+				$this->m_user->updateTimeLog($data, $timeLog->id);
 			}else{
-				$ins = $this->m_user->updateTimeLog($data, $timeLog->id);
+				$date = date('Y-m-d H:i:s');
+				$data['created_at'] = $date;
+				$data[$stat] = $date;
+				$data['status'] = $status;
+				$data['user_id'] = $this->session->userdata('user_id');
+				if ($status == 'morningin') {
+					$ins = $this->m_user->addTimeLog($data);	
+				}else{
+					$ins = $this->m_user->updateTimeLog($data, $timeLog->id);
+				}
 			}
 		}
 
 		redirect('login/profile');
+	}
+
+	public function computePayroll($user_id, $user_log_id)
+	{
+		$this->load->model('m_user_jhunnie_info');
+		$this->load->model('m_user_time_log');
+		$this->load->model('m_user_payroll');
+		$this->load->model('m_user');
+
+		$data['user_id'] = $user_id;
+		$data['time_log_id'] = $user_log_id;
+		$userRate = $this->m_user_jhunnie_info->get($user_id);
+		$timelog = $this->m_user_time_log->get($user_log_id);
+		$totalDailyHour = $this->m_user->getDailyHour($user_log_id);
+		$day_break = $this->m_user->getDailyBreak($user_log_id);
+
+		if ($day_break->hours < 1)
+		{
+			$hoursActive = $totalDailyHour != null && $day_break ? $totalDailyHour->hours - 1 : 0;
+			$breakHours = $totalDailyHour != null && $day_break ? 1 : 0;
+		}else{
+			$hoursActive = $totalDailyHour != null && $day_break ? $totalDailyHour->hours - $day_break->hours : 0;
+			$breakHours = $totalDailyHour != null && $day_break ? $day_break->hours : 0;
+		}
+		
+		$data['salary_rate'] = $userRate ? $userRate->salary_rate : false;
+
+		$userDaily = $userRate ? $userRate->salary_rate/20 : 0;
+		$userHourly = $userDaily/8;
+		$lateMin = 8-$hoursActive < 0 ? 0 : 8-$hoursActive;
+		$otMin = 8-$hoursActive < 0 ? abs(8-$hoursActive): 0;
+
+		$data['late'] = $lateMin * $userHourly;
+		$data['overtime'] = $otMin * $userHourly;
+		// night diff %total hrs rate * .20
+		$fnight_diff = $this->getNightDifference(strtotime($timelog->morning_in_log), strtotime($timelog->morning_out_log));
+		$snight_diff = $this->getNightDifference(strtotime($timelog->noon_in_log), strtotime($timelog->noon_out_log));
+		$anight_diff = $this->getNightDifference(strtotime($timelog->morning_in_log), strtotime($timelog->noon_out_log));
+
+		if ($fnight_diff + $snight_diff == $anight_diff) {
+			$night_diff = $fnight_diff + $snight_diff;			
+		}else{
+			$night_diff = $anight_diff - $breakHours;
+		}
+
+		$data['night_diff'] = $night_diff == 0 ? 0: ($night_diff) * ($userHourly * .20);
+		$salary = $userDaily - $data['late'] + $data['overtime'] + $data['night_diff'];
+		$data['salary_receive'] = $salary;
+
+		$this->m_user_payroll->recompute($user_log_id, $data);
+
+		return true;
+	}
+
+	public function getNightDifference($start_work,$end_work)
+	{
+
+	    $start_night = mktime('22','00','00',date('m',$start_work),date('d',$start_work),date('Y',$start_work));
+	    $end_night   = mktime('06','00','00',date('m',$start_work),date('d',$start_work) + 1,date('Y',$start_work));
+
+	    if($start_work >= $start_night && $start_work <= $end_night)
+	    {
+	        if($end_work >= $end_night)
+	        {
+	            return ($end_night - $start_work) / 3600;
+	        }
+	        else
+	        {
+	            return ($end_work - $start_work) / 3600;
+	        }
+	    }
+	    elseif($end_work >= $start_night && $end_work <= $end_night)
+	    {
+	        if($start_work <= $start_night)
+	        {
+	            return ($end_work - $start_night) / 3600;
+	        }
+	        else
+	        {
+	            return ($end_work - $start_work) / 3600;
+	        }
+	    }
+	    else
+	    {
+	        if($start_work < $start_night && $end_work > $end_night)
+	        {
+	            return ($end_night - $start_night) / 3600;
+	        }
+	        return 0;
+	    }
 	}
 	
 	public function logout(){
