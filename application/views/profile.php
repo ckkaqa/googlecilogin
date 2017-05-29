@@ -111,8 +111,8 @@
 		</div>
 		<input type="hidden" name="" id = "is-checkedin" value="<?php echo $check?>">
 		<div class="col-md-8 text-right">
-			<a href="<?php echo site_url('login/addTimeLog/in')?>" class = "btn btn-default btn-lg" id = "checkedin">Check in</a>
-			<a href="<?php echo site_url('login/addTimeLog/out')?>" class = "btn btn-default btn-lg" id = "checkedout">Check Out</a>
+				<a href="<?php echo site_url('login/addTimeLog/in')?>" class = "btn btn-default btn-lg" id = "checkedin">Check in</a>
+				<a href="<?php echo site_url('login/addTimeLog/out')?>" class = "btn btn-default btn-lg" id = "checkedout">Check Out</a>
 			<ul id = "log">
 			</ul>
 
@@ -122,12 +122,17 @@
 					$dsalary = $salaryRate->salary_rate/20;
 					$hsalary = $dsalary/8;
 				?>
+			<?php else: ?>
+				<?php 
+					$dsalary = 0;
+					$hsalary = 0;
+				?>
 			<?php endif ?>
                 <thead>
                 	<tr class="text-center">
                 		<td ></td>
-                        <td colspan="2">1st Half (<?php echo date('h:i a',strtotime($salaryRate->work_start))?>)</td>
-                        <td colspan="2">2nd Half (<?php echo date('h:i a',strtotime($salaryRate->work_end))?>)</td>
+                        <td colspan="2">1st Half (<?php echo date('h:i a',strtotime($salaryRate?$salaryRate->work_start:''))?>)</td>
+                        <td colspan="2">2nd Half (<?php echo date('h:i a',strtotime($salaryRate?$salaryRate->work_end:''))?>)</td>
                         <td >Hours</td>
                         <td >Salary</td>
                     </tr>

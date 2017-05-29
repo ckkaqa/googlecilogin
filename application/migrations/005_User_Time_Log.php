@@ -32,6 +32,10 @@ class Migration_User_Time_Log extends CI_Migration {
 				'type' => 'VARCHAR',
 				'constraint' => 100,
 			),
+			'check_log' => array(
+				'type' => 'VARCHAR',
+				'constraint' => 100,
+			),
 			'created_at' => array(
 				'type' => 'DATETIME',
 			),

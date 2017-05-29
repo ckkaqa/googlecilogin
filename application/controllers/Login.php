@@ -54,6 +54,7 @@ class Login extends CI_Controller {
 		
 		$timeLogs = $this->m_user->getUserTimeLogs($this->session->userdata('user_id'));
 		$salaryRate = $this->m_User_jhunnie_info->get($this->session->userdata('user_id'));
+		$timeLog = $this->m_user->getlastLogStatus($this->session->userdata('user_id'));
 
 		$contents['getHours'] = function($id)
 		{
@@ -63,6 +64,7 @@ class Login extends CI_Controller {
 
 		$info = $contents['user_profile'] = $this->session->userdata('user_profile');
 		$contents['salaryRate'] = $salaryRate;
+		// $contents['check_log'] = $timeLog->check_log;
 		$contents['check'] = $check;
 		$contents['time_logs'] = $timeLogs;
 
