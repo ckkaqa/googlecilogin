@@ -28,7 +28,7 @@
                 <tr class="text-center">
                       <td colspan="2">Morning</td>
                       <td colspan="2">Afternoon</td>
-                      <td colspan="4">Other info</td>
+                      <td colspan="6">Other info</td>
                   </tr>
                   <tr>
                       <th>Time In</th>
@@ -39,6 +39,8 @@
                       <th>Late(min)</th>
                       <th>OT(min)</th>
                       <th>Night Diff(min)</th>
+                      <th>Receive</th>
+                      <th>Recompute</th>
                   </tr>
               </thead>
               <tfoot>
@@ -51,6 +53,8 @@
                       <th>Late(min)</th>
                       <th>OT(min)</th>
                       <th>Night Diff(min)</th>
+                      <th>Receive</th>
+                      <th>Recompute</th>
                   </tr>
               </tfoot>
               <tbody>
@@ -85,10 +89,24 @@
                     <td>
                       <input type="text" name = "noon_out_log[]" class="input_time form-control" id="noon_out_log" value = "<?php echo $v->noon_out_log == '0000-00-00 00:00:00' ? '' : $new_noon_out_log ?>">
                     </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                      <?php echo $v->salary_rate ? number_format($v->salary_rate) : '' ?>
+                    </td>
+                    <td>
+                      <?php echo $v->late ? '-'.$v->late : '' ?>
+                    </td>
+                    <td>
+                      <?php echo $v->overtime ? $v->overtime : '' ?>
+                    </td>
+                    <td>
+                      <?php echo $v->night_diff ? $v->night_diff : '' ?>
+                    </td>
+                    <td>
+                      <?php echo $v->salary_receive ? 'P '.number_format($v->salary_receive, 2) : '' ?>
+                    </td>
+                    <td>
+                      <a href = "<?php echo site_url('admin/recomputePayroll/'.$hashed_id.'/'.$v->id) ?>" class = "btn btn-success">Recompute</a>
+                    </td>
                   </tr>
                 <?php endforeach; ?>
               </tbody>

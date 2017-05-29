@@ -10,6 +10,7 @@ class Admin extends CI_Controller {
 		$this->load->model('m_chat');
 		$this->load->library('encrypt');
 		$this->load->model('m_user');
+		$this->load->model('m_user_payroll');
 		$this->load->model('m_user_jhunnie_info');
 		$this->load->model('m_user_time_log');
 	}
@@ -63,6 +64,7 @@ class Admin extends CI_Controller {
 
 	public function viewUserLog($user_id)
 	{
+		$data['hashed_id'] = $user_id;
 		$user_id = decode_url($user_id);
 		$data['time_logs'] = $this->m_user->getUserTimeLogs($user_id);
 		$data['user'] = $this->m_user->getUser($user_id);
@@ -80,10 +82,10 @@ class Admin extends CI_Controller {
 
 			    $updateArray[] = array(
 			        'id'=>$id[$x],
-			        'morning_in_log' => date("Y-m-d H:i", strtotime($morning_in_log[$x])),
-			        'morning_out_log' => date("Y-m-d H:i", strtotime($morning_out_log[$x])),
-			        'noon_in_log' => date("Y-m-d H:i", strtotime($noon_in_log[$x])),
-			        'noon_out_log' => date("Y-m-d H:i", strtotime($noon_out_log[$x])),
+			        'morning_in_log' => $morning_in_log[$x] == '' ? '0000-00-00 00:00:00' : date("Y-m-d H:i", strtotime($morning_in_log[$x])),
+			        'morning_out_log' => $morning_out_log[$x] == '' ? '0000-00-00 00:00:00' : date("Y-m-d H:i", strtotime($morning_out_log[$x])),
+			        'noon_in_log' => $noon_in_log[$x] == '' ? '0000-00-00 00:00:00' : date("Y-m-d H:i", strtotime($noon_in_log[$x])),
+			        'noon_out_log' => $noon_out_log[$x] == '' ? '0000-00-00 00:00:00' : date("Y-m-d H:i", strtotime($noon_out_log[$x])),
 			    );
 			}  
 
@@ -93,6 +95,46 @@ class Admin extends CI_Controller {
 		}
 
 		$this->load->view('admin_user_time_log', $data);
+	}
+
+	public function recomputePayroll($user_id, $user_log_id)
+	{
+		$data['user_id'] = decode_url($user_id);
+		$data['time_log_id'] = $user_log_id;
+		$userRate = $this->m_user_jhunnie_info->get(decode_url($user_id));
+		$timelog = $this->m_user_time_log->get($user_log_id);
+		$totalDailyHour = $this->m_user->getDailyHour($user_log_id);
+		$day_break = $this->m_user->getDailyBreak($user_log_id);
+
+		if ($day_break->hours < 0)
+		{
+			$hoursActive = $totalDailyHour != null && $day_break ? $totalDailyHour->hours - 1 : 0;
+		}else{
+			$hoursActive = $totalDailyHour != null && $day_break ? $totalDailyHour->hours - $day_break->hours : 0;
+		}
+		
+		$data['salary_rate'] = $userRate ? $userRate->salary_rate : false;
+
+		$userDaily = $userRate ? $userRate->salary_rate/20 : 0;
+		$userHourly = $userDaily/8;
+		$lateMin = 8-$hoursActive < 0 ? 0 : 8-$hoursActive;
+		$otMin = 8-$hoursActive < 0 ? abs(8-$hoursActive): 0;
+
+		$data['late'] = $lateMin * $userHourly;
+		$data['overtime'] = $otMin * $userHourly;
+		// night diff %total hrs rate * .20
+		$data['night_diff'] = false;
+		$salary = $userDaily - $data['late'] + $data['overtime'];
+		$data['salary_receive'] = $salary;
+		
+		// echo "<pre>";
+		// var_dump($data);
+		// echo "</pre>";
+		// die();
+
+		$this->m_user_payroll->recompute($user_log_id, $data);
+
+		redirect(site_url('admin/viewUserLog/'.$user_id));
 	}
 
 	public function viewConversation($conversation_id)

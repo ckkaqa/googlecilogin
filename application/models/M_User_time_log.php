@@ -7,4 +7,13 @@ class M_User_time_log extends CI_Model {
 
 		return true;
 	}
+
+	public function get($log_id)
+	{
+		$this->db->where('id', $log_id);
+
+		$q  = $this->db->get('user_time_log');
+
+		return $q->row();
+	}
 }

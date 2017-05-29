@@ -128,14 +128,40 @@ class M_User extends CI_Model {
     	
 	}
 
+	public function getDailyBreak($log_id)
+	{
+		$sql = '
+			SELECT 
+				TIME_TO_SEC(TIMEDIFF(noon_in_log, morning_out_log))/3600 as hours
+			FROM user_time_log
+			WHERE id = ?
+		';
+		
+		$q = $this->db->query($sql, [$log_id]);
+		$result = $q->row();
+
+		return $result;
+	}
+
+	public function getNightDiffTotalHours($log_id)
+	{
+		// get ung night diff within 10pm to 6am;
+		// kung may natamaan else 0
+		return 1;
+	}
+
 	public function getUserTimeLogs($userId)
 	{
 
 		$sql = '
 			SELECT
-				*
-			FROM user_time_log
-			WHERE user_id = ?
+				tl.*, up.late, up.night_diff,
+				up.overtime, up.salary_receive,
+				up.salary_rate
+			FROM user_time_log tl
+			LEFT JOIN user_payroll up
+			ON up.time_log_id = tl.id
+			WHERE tl.user_id = ?
 			ORDER BY morning_in_log DESC
 		';
 
