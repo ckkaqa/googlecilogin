@@ -13,6 +13,7 @@ class Admin extends CI_Controller {
 		$this->load->model('m_user_payroll');
 		$this->load->model('m_user_jhunnie_info');
 		$this->load->model('m_user_time_log');
+		$this->load->helper('date');
 	}
 
 	public function home()
@@ -117,7 +118,15 @@ class Admin extends CI_Controller {
 
 		$data['salary_rate'] = $userRate ? $userRate->salary_rate : false;
 
-		$userDaily = $userRate ? $userRate->salary_rate/20 : 0;
+		$datestring = '%Y';
+		$time = time();
+		$year = mdate($datestring, $time);
+		$datestring = '%m';
+		$time = time();
+		$month = mdate($datestring, $time);
+
+		$totalWorkingDays = getMonthTotalWorkingDays($year, $month, array(0, 6));
+		$userDaily = $userRate ? $userRate->salary_rate/$totalWorkingDays : 0;
 		$userHourly = $userDaily/8;
 		$lateMin = 8-$hoursActive < 0 ? 0 : 8-$hoursActive;
 		$otMin = 8-$hoursActive < 0 ? abs(8-$hoursActive): 0;

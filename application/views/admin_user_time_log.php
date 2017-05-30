@@ -95,16 +95,16 @@
                       <input type="text" name = "noon_out_log[]" class="input_time form-control" id="noon_out_log" value = "<?php echo $v->noon_out_log == '0000-00-00 00:00:00' ? '' : $new_noon_out_log ?>">
                     </td>
                     <td>
-                      <?php echo $v->salary_rate ? number_format($v->salary_rate) : '' ?>
+                      <?php echo $v->salary_rate ? number_format($v->salary_rate, 2) : '' ?>
                     </td>
                     <td>
-                      <?php echo $v->late ? '-'.$v->late : '' ?>
+                      <?php echo $v->late ? '-'.number_format($v->late, 2) : '' ?>
                     </td>
                     <td>
-                      <?php echo $v->overtime ? $v->overtime : '' ?>
+                      <?php echo $v->overtime ? number_format($v->overtime, 2) : '' ?>
                     </td>
                     <td>
-                      <?php echo $v->night_diff ? $v->night_diff : '' ?>
+                      <?php echo $v->night_diff ? number_format($v->night_diff, 2) : '' ?>
                     </td>
                     <td>
                       <?php echo $v->salary_receive ? 'P '.number_format($v->salary_receive, 2) : '' ?>
