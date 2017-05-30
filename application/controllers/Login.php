@@ -159,7 +159,7 @@ class Login extends CI_Controller {
 		$data['user_id'] = $user_id;
 		$data['time_log_id'] = $user_log_id;
 		$existLog = $this->m_user_payroll->get($user_log_id);
-		$userRate = $existLog ? $existLog : $this->m_user_jhunnie_info->get(decode_url($user_id));
+		$userRate = $existLog ? $existLog : $this->m_user_jhunnie_info->get($user_id);
 		$timelog = $this->m_user_time_log->get($user_log_id);
 		$totalDailyHour = $this->m_user->getDailyHour($user_log_id);
 		$day_break = $this->m_user->getDailyBreak($user_log_id);

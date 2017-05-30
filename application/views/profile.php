@@ -120,9 +120,9 @@
 			<?php else: ?>
 				<a href="<?php echo site_url('login/addTimeLog/in')?>" class = "btn btn-default btn-lg" id = "checkedin">Check in</a>
 			<?php endif ?>
-			<!-- <?php if ($timeLog && $timeLog->status != 'noonout'): ?>
+			<?php if ($timeLog && $timeLog->status != 'noonout'): ?>
 				<a href="<?php echo site_url('login/addTimeLog/ootd')?>" class = "btn btn-default btn-lg" id = "checkedin">Out for the Day</a>
-			<?php endif ?> -->
+			<?php endif ?>
 			<ul id = "log">
 			</ul>
 
@@ -172,7 +172,9 @@
 	                			<?php 
 	                			if ($v->noon_out_log != '0000-00-00 00:00:00') {
 	                				$brhour = $breakHour($v->id);
-	                				echo round($brhour, 2);
+	                				if ($brhour > 0) {
+	                					echo round($brhour, 2);
+	                				}
 	                				// echo(round($hours->hours,2));
 	                			}
 
