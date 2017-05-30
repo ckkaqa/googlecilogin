@@ -200,7 +200,8 @@ class M_User extends CI_Model {
 	public function getMonthlySalary($userId)
 	{
 		$sql = '
-			SELECT year(t.morning_in_log) as y, month(t.morning_in_log) as m, sum(up.salary_receive) as payment
+			SELECT year(t.morning_in_log) as y, month(t.morning_in_log) as m, sum(up.salary_receive) as payment,
+			sum(up.late) as late, sum(up.night_diff) as night_diff, sum(up.overtime) as overtime
 			from user_time_log t
 			LEFT JOIN user_payroll up
 			ON up.time_log_id = t.id

@@ -192,11 +192,15 @@
 	<div class="row">
 		<div class="container">
 			<div class="col-md-12">
+				<h1 class="text-center">Monthly Salary Report</h1>
 				<table id="example2" class="table table-striped table-bordered " cellspacing="0" width="100%">
 					<tr>
-						<td>Year</td>
-						<td>Month</td>
-						<td>Salary</td>
+						<th>Year</th>
+						<th>Month</th>
+						<th>Total Late (PHP)</th>
+						<th>Toal Overtime (PHP)</th>
+						<th>Total Night Diff (PHP)</th>
+						<th>Total Salary (PHP)</th>
 					</tr>
 					<?php foreach ($totalMonthSalary as $key => $v):?>
 						<tr>
@@ -206,6 +210,9 @@
 								$monthName = $dateObj->format('F')
 							?>
 							<td><?php echo $monthName; ?></td>
+							<td>P <?php echo number_format($v->late, 2); ?></td>
+							<td>P <?php echo number_format($v->overtime, 2); ?></td>
+							<td>P <?php echo number_format($v->night_diff, 2); ?></td>
 							<td>P <?php echo number_format($v->payment, 2); ?></td>
 						</tr>
 					<?php endforeach ?>
