@@ -107,7 +107,7 @@
                       <?php echo $v->night_diff ? number_format($v->night_diff, 2) : '' ?>
                     </td>
                     <td>
-                      <?php echo $v->salary_receive > 0  ? 'P '.number_format($v->salary_receive, 2) : '' ?>
+                      <?php echo $v->salary_receive ? 'P '.number_format($v->salary_receive, 2) : '' ?>
                     </td>
                     <td>
                       <a href = "<?php echo site_url('admin/recomputePayroll/'.$hashed_id.'/'.$v->id) ?>" class = "btn btn-success">Recompute</a>
