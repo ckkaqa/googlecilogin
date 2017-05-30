@@ -47,6 +47,8 @@ class Login extends CI_Controller {
 	public function profile($check = false){
 		$this->load->model('m_user');
 		$this->load->model('m_User_jhunnie_info');
+		$this->load->model('m_user_payroll');
+		$this->load->helper('date');
 
 		if($this->session->userdata('login') != true){
 			redirect('');
@@ -56,6 +58,7 @@ class Login extends CI_Controller {
 		$totalMonthSalary = $this->m_user->getMonthlySalary($this->session->userdata('user_id'));
 
 		$salaryRate = $this->m_User_jhunnie_info->get($this->session->userdata('user_id'));
+
 		$timeLog = $this->m_user->getlastLogStatus($this->session->userdata('user_id'));
 
 		$contents['getHours'] = function($id)
@@ -98,6 +101,7 @@ class Login extends CI_Controller {
 		$status = 'morningin';
 		$stat = 'morning_in_log';
 		$timeLog = $this->m_user->getlastLogStatus($this->session->userdata('user_id'));
+
 		if ($timeLog) {
 			
 			$diff = timespan(strtotime($timeLog->morning_in_log), strtotime(date('Y-m-d H:i:s')));
@@ -154,7 +158,8 @@ class Login extends CI_Controller {
 
 		$data['user_id'] = $user_id;
 		$data['time_log_id'] = $user_log_id;
-		$userRate = $this->m_user_jhunnie_info->get($user_id);
+		$existLog = $this->m_user_payroll->get($user_log_id);
+		$userRate = $existLog ? $existLog : $this->m_user_jhunnie_info->get(decode_url($user_id));
 		$timelog = $this->m_user_time_log->get($user_log_id);
 		$totalDailyHour = $this->m_user->getDailyHour($user_log_id);
 		$day_break = $this->m_user->getDailyBreak($user_log_id);
@@ -170,7 +175,15 @@ class Login extends CI_Controller {
 		
 		$data['salary_rate'] = $userRate ? $userRate->salary_rate : false;
 
-		$userDaily = $userRate ? $userRate->salary_rate/20 : 0;
+		$datestring = '%Y';
+		$time = time();
+		$year = mdate($datestring, $time);
+		$datestring = '%m';
+		$time = time();
+		$month = mdate($datestring, $time);
+
+		$totalWorkingDays = getMonthTotalWorkingDays($year, $month, array(0, 6));
+		$userDaily = $userRate ? $userRate->salary_rate/$totalWorkingDays : 0;
 		$userHourly = $userDaily/8;
 		$lateMin = 8-$hoursActive < 0 ? 0 : 8-$hoursActive;
 		$otMin = 8-$hoursActive < 0 ? abs(8-$hoursActive): 0;
@@ -190,7 +203,7 @@ class Login extends CI_Controller {
 
 		$data['night_diff'] = $night_diff == 0 ? 0: ($night_diff) * ($userHourly * .20);
 		$salary = $userDaily - $data['late'] + $data['overtime'] + $data['night_diff'];
-		$data['salary_receive'] = $salary;
+		$data['salary_receive'] = $salary > 0 ? $salary : 0;
 
 		$this->m_user_payroll->recompute($user_log_id, $data);
 

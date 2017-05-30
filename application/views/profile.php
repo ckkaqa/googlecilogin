@@ -127,17 +127,6 @@
 			</ul>
 
 			<table id="example" class="table table-striped table-bordered " cellspacing="0" width="100%">
-			<?php if ($salaryRate): ?>
-				<?php 
-					$dsalary = $salaryRate->salary_rate/20;
-					$hsalary = $dsalary/8;
-				?>
-			<?php else: ?>
-				<?php 
-					$dsalary = 0;
-					$hsalary = 0;
-				?>
-			<?php endif ?>
                 <thead>
                 	<tr class="text-center">
                 		<td ></td>
@@ -153,7 +142,7 @@
                         <th>Time In</th>
                         <th>Time out</th>
                         <th>( 8 hours )</th>
-                        <th>( P <?php echo $dsalary ?>.00 )</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tfoot>
@@ -164,7 +153,7 @@
                         <th>Time In</th>
                         <th>Time out</th>
                         <th>Hours</th>
-                        <th>( P <?php echo $hsalary?>.00 )</th>
+                        <th></th>
                     </tr>
                 </tfoot>
                 <tbody>
@@ -217,7 +206,7 @@
 								$monthName = $dateObj->format('F')
 							?>
 							<td><?php echo $monthName; ?></td>
-							<td><?php echo $v->payment; ?></td>
+							<td>P <?php echo number_format($v->payment, 2); ?></td>
 						</tr>
 					<?php endforeach ?>
 				</table>
