@@ -188,7 +188,8 @@ class Login extends CI_Controller {
 		$lateMin = 8-$hoursActive < 0 ? 0 : 8-$hoursActive;
 		$otMin = 8-$hoursActive < 0 ? abs(8-$hoursActive): 0;
 
-		$data['late'] = $lateMin * $userHourly;
+		$lateRate = $lateMin * $userHourly;
+		$data['late'] = $lateRate > $userDaily ? 0 : $lateRate;
 		$data['overtime'] = $otMin * $userHourly;
 		// night diff %total hrs rate * .20
 		$fnight_diff = $this->getNightDifference(strtotime($timelog->morning_in_log), strtotime($timelog->morning_out_log));
@@ -203,7 +204,7 @@ class Login extends CI_Controller {
 
 		$data['night_diff'] = $night_diff == 0 ? 0: ($night_diff) * ($userHourly * .20);
 		$salary = $userDaily - $data['late'] + $data['overtime'] + $data['night_diff'];
-		$data['salary_receive'] = $salary > 0 ? $salary : 0;
+		$data['salary_receive'] = $lateRate < $userDaily ? $salary > 0 ? $salary : 0 : 0;
 
 		$this->m_user_payroll->recompute($user_log_id, $data);
 
