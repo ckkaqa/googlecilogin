@@ -212,7 +212,11 @@
 					<?php foreach ($totalMonthSalary as $key => $v):?>
 						<tr>
 							<td><?php echo $v->y; ?></td>
-							<td><?php date('F',strtotime($v->m)); ?></td>
+							<?php 
+								$dateObj   = DateTime::createFromFormat('!m', $v->m);
+								$monthName = $dateObj->format('F')
+							?>
+							<td><?php echo $monthName; ?></td>
 							<td><?php echo $v->payment; ?></td>
 						</tr>
 					<?php endforeach ?>
