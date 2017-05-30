@@ -17,6 +17,18 @@
 </head>
 <body>
     <a href = "<?php echo site_url('admin/setup') ?>" class = "btn btn-default">View All user logins</a>
+
+    <div class="container">
+      <br/>
+      <?php if ($this->session->flashdata('errors')): ?>
+        <div class = "alert alert-danger">
+          <?php 
+            echo $this->session->flashdata('errors'); 
+           ?>
+        </div>
+      <?php endif ?>
+    </div>
+
     <div class="row">
     <div class="col-md-12">
       <div style="padding-left: 25px;">

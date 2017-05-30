@@ -65,6 +65,7 @@ class Admin extends CI_Controller {
 
 	public function viewUserLog($user_id)
 	{
+		$this->load->library('session');
 		$data['hashed_id'] = $user_id;
 		$user_id = decode_url($user_id);
 		$data['time_logs'] = $this->m_user->getUserTimeLogs($user_id);
@@ -80,6 +81,21 @@ class Admin extends CI_Controller {
 			$noon_out_log = $this->input->post('noon_out_log');
 
 			for($x = 0; $x < sizeof($id); $x++){
+
+				if ($morning_out_log[$x] < $morning_in_log[$x]) {
+				   	$this->session->set_flashdata('errors', 'Morning log out cannot be earlier than Morning Log in');
+
+					redirect(current_url());
+			    }elseif ($noon_in_log[$x] < $morning_out_log[$x]) {
+			    	$this->session->set_flashdata('errors', 'Afternoon log in cannot be earlier than Morning Log Out');
+
+					redirect(current_url());
+			    }elseif ($noon_out_log[$x] < $noon_in_log[$x]) {
+			    	$this->session->set_flashdata('errors', 'Afternoon log out cannot be earlier than Afternoon Log in');
+
+					redirect(current_url());
+			    }
+			    
 
 			    $updateArray[] = array(
 			        'id'=>$id[$x],
