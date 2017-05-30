@@ -107,7 +107,7 @@ class Admin extends CI_Controller {
 		$timelog = $this->m_user_time_log->get($user_log_id);
 		$totalDailyHour = $this->m_user->getDailyHour($user_log_id);
 		$day_break = $this->m_user->getDailyBreak($user_log_id);
-		
+
 		if ($day_break->hours < 1)
 		{
 			$hoursActive = $totalDailyHour != null && $day_break ? $totalDailyHour->hours - 1 : 0;
@@ -146,7 +146,7 @@ class Admin extends CI_Controller {
 
 		$data['night_diff'] = $night_diff == 0 ? 0: ($night_diff) * ($userHourly * .20);
 		$salary = $userDaily - $data['late'] + $data['overtime'] + $data['night_diff'];
-		$data['salary_receive'] = $salary;
+		$data['salary_receive'] = $salary > 0 ? $salary : 0 ;
 
 		$this->m_user_payroll->recompute($user_log_id, $data);
 
