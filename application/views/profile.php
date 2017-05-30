@@ -66,6 +66,24 @@
 <body>
 	<h1>CodeIgniter Simple Chat App</h1>
 
+	<div class="container">
+      <br/>
+      <?php if ($this->session->flashdata('errors')): ?>
+        <div class = "alert alert-danger">
+          <?php 
+            echo $this->session->flashdata('errors'); 
+           ?>
+        </div>
+      <?php endif ?>
+      <?php if ($this->session->flashdata('messages')): ?>
+        <div class = "alert alert-success">
+          <?php 
+            echo $this->session->flashdata('messages'); 
+           ?>
+        </div>
+      <?php endif ?>
+    </div>
+    
 	<div class = "container">
 		<div class="col-md-4">
 			<p>My Profile</p>

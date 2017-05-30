@@ -27,6 +27,13 @@
            ?>
         </div>
       <?php endif ?>
+      <?php if ($this->session->flashdata('messages')): ?>
+        <div class = "alert alert-success">
+          <?php 
+            echo $this->session->flashdata('messages'); 
+           ?>
+        </div>
+      <?php endif ?>
     </div>
 
     <div class="row">

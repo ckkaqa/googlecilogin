@@ -145,6 +145,11 @@ class Login extends CI_Controller {
 				}
 			}
 		}
+		if ($data['status'] == 'noonout') {
+			$this->session->set_flashdata('messages', 'Check Out Successfull.  See you next time');
+		}else{
+			$this->session->set_flashdata('messages', 'Check '.$check.' Successfull');
+		}
 
 		redirect('login/profile');
 	}

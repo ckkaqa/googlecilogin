@@ -81,17 +81,21 @@ class Admin extends CI_Controller {
 			$noon_out_log = $this->input->post('noon_out_log');
 
 			for($x = 0; $x < sizeof($id); $x++){
+				if ($morning_in_log[$x] == '' || $morning_out_log[$x] == '' || $noon_in_log[$x] == '' || $noon_out_log[$x] == '') {
+					$this->session->set_flashdata('errors', 'There are empty Value/s');
 
+					redirect(current_url());
+				}
 				if ($morning_out_log[$x] < $morning_in_log[$x]) {
-				   	$this->session->set_flashdata('errors', 'Morning log out cannot be earlier than Morning Log in');
+				   	$this->session->set_flashdata('errors', 'Morning Time out cannot be earlier than Morning Time in');
 
 					redirect(current_url());
 			    }elseif ($noon_in_log[$x] < $morning_out_log[$x]) {
-			    	$this->session->set_flashdata('errors', 'Afternoon log in cannot be earlier than Morning Log Out');
+			    	$this->session->set_flashdata('errors', 'Afternoon Time in cannot be earlier than Morning Time Out');
 
 					redirect(current_url());
 			    }elseif ($noon_out_log[$x] < $noon_in_log[$x]) {
-			    	$this->session->set_flashdata('errors', 'Afternoon log out cannot be earlier than Afternoon Log in');
+			    	$this->session->set_flashdata('errors', 'Afternoon Time out cannot be earlier than Afternoon Time in');
 
 					redirect(current_url());
 			    }
@@ -108,6 +112,7 @@ class Admin extends CI_Controller {
 
 			$this->m_user_time_log->update_user_logs($updateArray);
 
+			$this->session->set_flashdata('messages', 'Saving Successfull');
 			redirect(current_url());
 		}
 
