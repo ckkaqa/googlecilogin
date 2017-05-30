@@ -200,12 +200,37 @@
 		</div>
 	</div>
 
+	<div class="row">
+		<div class="container">
+			<div class="col-md-12">
+				<table id="example2" class="table table-striped table-bordered " cellspacing="0" width="100%">
+					<tr>
+						<td>Year</td>
+						<td>Month</td>
+						<td>Salary</td>
+					</tr>
+					<?php foreach ($totalMonthSalary as $key => $v):?>
+						<tr>
+							<td><?php echo $v->y; ?></td>
+							<td><?php date('F',strtotime($v->m)); ?></td>
+							<td><?php echo $v->payment; ?></td>
+						</tr>
+					<?php endforeach ?>
+				</table>
+			</div>
+		</div>
+	</div>
+
 	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds</p>
 </div>
 
 <script type="text/javascript">
 	$(document).ready(function() {
         $('#example').DataTable( {
+        	"order": [[ 0, "desc" ]]
+    	} );
+
+    	$('#example2').DataTable( {
         	"order": [[ 0, "desc" ]]
     	} );
     } );

@@ -196,4 +196,21 @@ class M_User extends CI_Model {
 
 		return $query->row();
 	}
+
+	public function getMonthlySalary($userId)
+	{
+		$sql = '
+			SELECT year(t.morning_in_log) as y, month(t.morning_in_log) as m, sum(up.salary_receive) as payment
+			from user_time_log t
+			LEFT JOIN user_payroll up
+			ON up.time_log_id = t.id
+			WHERE t.user_id = ?
+			group by year(t.morning_in_log), month(t.morning_in_log)
+			ORDER BY morning_in_log DESC
+		';
+
+		$q = $this->db->query($sql, [$userId]);
+
+		return $q->result();
+	}
 }

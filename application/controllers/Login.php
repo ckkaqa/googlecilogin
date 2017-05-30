@@ -53,6 +53,8 @@ class Login extends CI_Controller {
 		}
 		
 		$timeLogs = $this->m_user->getUserTimeLogs($this->session->userdata('user_id'));
+		$totalMonthSalary = $this->m_user->getMonthlySalary($this->session->userdata('user_id'));
+
 		$salaryRate = $this->m_User_jhunnie_info->get($this->session->userdata('user_id'));
 		$timeLog = $this->m_user->getlastLogStatus($this->session->userdata('user_id'));
 
@@ -82,6 +84,7 @@ class Login extends CI_Controller {
 		$contents['timeLog'] = $timeLog;
 		$contents['check'] = $check;
 		$contents['time_logs'] = $timeLogs;
+		$contents['totalMonthSalary'] = $totalMonthSalary;
 
 		$this->load->view('profile',$contents);
 
