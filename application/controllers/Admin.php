@@ -172,6 +172,7 @@ class Admin extends CI_Controller {
 
 		$this->m_user_payroll->recompute($user_log_id, $data);
 
+		$this->session->set_flashdata('messages', 'Recompute Successfull');
 		redirect(site_url('admin/viewUserLog/'.$user_id));
 	}
 

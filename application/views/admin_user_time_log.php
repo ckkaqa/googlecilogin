@@ -14,6 +14,11 @@
     <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
 
+    <style type="text/css">
+      .fit{
+        width: 150px !important;
+      }
+    </style>
 </head>
 <body>
     <a href = "<?php echo site_url('admin/setup') ?>" class = "btn btn-default">View All user logins</a>
@@ -55,16 +60,16 @@
                       <td colspan="6">Other info</td>
                   </tr>
                   <tr>
-                      <th>Time In</th>
-                      <th>Time out</th>
-                      <th>Time In</th>
-                      <th>Time out</th>
+                      <th class="fit">Time In</th>
+                      <th class="fit">Time out</th>
+                      <th class="fit">Time In</th>
+                      <th class="fit">Time out</th>
                       <th>Monthly Salary</th>
                       <th>Late(min)</th>
                       <th>OT(min)</th>
                       <th>Night Diff(min)</th>
                       <th>Receive</th>
-                      <th>Recompute</th>
+                      <th>Re compute</th>
                   </tr>
               </thead>
               <tfoot>
@@ -78,7 +83,7 @@
                       <th>OT(min)</th>
                       <th>Night Diff(min)</th>
                       <th>Receive</th>
-                      <th>Recompute</th>
+                      <th>Re compute</th>
                   </tr>
               </tfoot>
               <tbody>
@@ -129,7 +134,7 @@
                       <?php echo $v->salary_receive ? 'P '.number_format($v->salary_receive, 2) : '' ?>
                     </td>
                     <td>
-                      <a href = "<?php echo site_url('admin/recomputePayroll/'.$hashed_id.'/'.$v->id) ?>" class = "btn btn-success">Recompute</a>
+                      <a href = "<?php echo site_url('admin/recomputePayroll/'.$hashed_id.'/'.$v->id) ?>" class = "btn btn-success"><span class = "glyphicon glyphicon-refresh"></span></a>
                     </td>
                   </tr>
                 <?php endforeach; ?>
