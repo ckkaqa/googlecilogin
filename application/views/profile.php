@@ -163,7 +163,7 @@
 
                 		?>
                 		<tr class = "text-left">
-                			<td><?php echo date('F d, Y',strtotime($v->morning_in_log)); ?></td>
+                			<td data-order="<?php echo $v->morning_in_log?>"><?php echo date('F d, Y',strtotime($v->morning_in_log)); ?></td>
                 			<td><?php echo date('h:i a',strtotime($v->morning_in_log)); ?></td>
                 			<td><?php echo $v->morning_out_log == '0000-00-00 00:00:00' ? '' : date('h:i a',strtotime($v->morning_out_log)); ?></td>
                 			<td><?php echo $v->noon_in_log == '0000-00-00 00:00:00' ? '' : date('h:i a',strtotime($v->noon_in_log)) ?></td>
