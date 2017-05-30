@@ -7,7 +7,7 @@ class M_User_payroll extends CI_Model
 
 		if($payroll)
 		{
-			$this->update($payroll, $data);
+			$this->update($payroll->id, $data);
 		}else{
 			$this->insert($data);
 		}
@@ -34,8 +34,6 @@ class M_User_payroll extends CI_Model
 		$this->db->where('time_log_id', $log_id);
 		$q = $this->db->get('user_payroll');
 
-		$payroll = $q->row();
-
-		return $payroll->id;
+		return $q->row();
 	}
 }
